@@ -31,7 +31,11 @@ proc buildFeed(feedUrl: string,itemCount: int, fullText = false , isAtom = false
     formattedMsg = formattedMsg & "<h2><a href=3D'" & rssFeed.link & "'>" & rssFeed.title & "</a></h2><ul>"
 
     for i in 0 ..< itemCount:
-      formattedMsg = formattedMsg & "<li><h3><a href=3D'" & rssFeed.items[i].link & "'>" & rssFeed.items[i].title & "</a></h3>"
+      # Sometimes the amount of news is smaller than what the user sets
+      try:
+        formattedMsg = formattedMsg & "<li><h3><a href=3D'" & rssFeed.items[i].link & "'>" & rssFeed.items[i].title & "</a></h3>"
+      except:
+        break
 
       if fullText:
         formattedMsg = formattedMsg & "<p>" & rssFeed.items[i].description.replace("href=", "href=3D").replace("<hr />","") & "</p></li>"
@@ -45,8 +49,11 @@ proc buildFeed(feedUrl: string,itemCount: int, fullText = false , isAtom = false
     formattedMsg = formattedMsg & "<h2><a href=3D'" & atomFeed.link.href & "'>" & atomFeed.title.text & "</a></h2><ul>"
 
     for i in 0 ..< itemCount:
-      formattedMsg = formattedMsg & "<li><h3><a href=3D'" & atomFeed.entries[i].link.href & "'>" & atomFeed.entries[i].title.text & "</a></h3>"
-
+      # Sometimes the amount of news is smaller than what the user sets
+      try:
+        formattedMsg = formattedMsg & "<li><h3><a href=3D'" & atomFeed.entries[i].link.href & "'>" & atomFeed.entries[i].title.text & "</a></h3>"
+      except:
+        break
       if fullText:
         formattedMsg = formattedMsg & "<p>" & atomFeed.entries[i].content.text.replace("href=", "href=3D").replace("<hr />","") & "</p></li>"
       else:
