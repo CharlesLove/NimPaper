@@ -11,7 +11,7 @@ Self-hosted application to send a selection of RSS/Atom feeds to your inbox. Gre
 3. Create a new configuration file or modify the sample.cfg to setup your feeds
    - Modify the file to include your email and password that you would send your feed to.
      - I'd recommend using an app password after setting up two factor with Google.
-     - For simplicity, NimPaper uses your own email to both send and receive emails.
+     - For simplicity, NimPaper uses the same email account to both send and receive NimPaper emails.
    - Add your feeds following the given structure:
      - ["Feed Url in Quotes"],[Post Count],[Show Full Text? (true/false)],[Is Atom Feed? (true/false)]
      - If your feed is atom based makes sure to set the final option as true or it won't load!
