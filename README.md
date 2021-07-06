@@ -14,6 +14,7 @@ Program to send a selection of RSS/Atom feeds to your inbox. Great for cutting d
      - For simplicity, NimPaper uses your own email to both send and receive emails.
    - Add your feeds following the given structure:
      - ["Feed Url in Quotes"],[Post Count],[Show Full Text? (true/false)],[Is Atom Feed? (true/false)]
+     - If your feed is atom based makes sure to set the final option as true or it won't load!
    - You can give a selection of your feeds a title to better organize and seperate them
      - title:["Title Name in Quotes"]
 4. Compile your nim code.
