@@ -8,12 +8,8 @@ var
 for kind,key,val in getOpt():
   case kind
     of cmdArgument:
-      echo("Got a command argument: ", key)
       configFile = $key
-    of cmdLongOption,cmdShortOption:
-      case key
-      of "port": echo("Got port: ", val)
-      else: echo("Got another flag --",key," with value: ",val)
+    of cmdLongOption,cmdShortOption: discard
     of cmdEnd: discard
 
 var fullMsg = "<html><body>"
