@@ -1,5 +1,5 @@
 # NimPaper
-Program to send a selection of RSS/Atom feeds to your inbox. Great for cutting down on doom scrolling!
+Self-hosted application to send a selection of RSS/Atom feeds to your inbox. Great for cutting down on doom scrolling!
 
 ## How to Use
 1. Install Nim on your target system
