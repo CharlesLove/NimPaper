@@ -1,4 +1,4 @@
-import smtp, rss, strutils, FeedNim, times, parseopt
+import smtp, rss, strutils, FeedNim, times, parseopt, unittest
 
 var
   eml = ""
@@ -13,6 +13,12 @@ for kind,key,val in getOpt():
     of cmdEnd: discard
 
 var fullMsg = "<html><body>"
+
+#var modPubDate = "Thu, 26 Aug 2021 15:00:00 +0000";
+#modPubDate = modPubDate[0 .. ^3] & ":" & modPubDate[^2 .. ^1]
+#doAssert((parse(modPubDate, "ddd, dd MMM yyyy HH:mm:ss zzz").utc - now().utc).inHours > 24)
+#echo (now().utc - parse(modPubDate, "ddd, dd MMM yyyy HH:mm:ss zzz").utc).inHours
+#quit()
 
 proc sendMail(fromAddr: string; toAddrs, ccAddrs: seq[string];
               subject, message, login, password: string;
@@ -33,9 +39,16 @@ proc buildFeed(feedUrl: string,itemCount: int, fullText = false , isAtom = false
       for i in 0 ..< itemCount:
         # Sometimes the amount of news is smaller than what the user sets
         try:
+          # "Tue, 19 Oct 2004 13:38:55 -0400"
+          var modPubDate = rssFeed.items[i].pubDate;
+          modPubDate = modPubDate[0 .. ^3] & ":" & modPubDate[^2 .. ^1]
+          if (now().utc - parse(modPubDate, "ddd, dd MMM yyyy HH:mm:ss zzz").utc).inHours > 24:
+            continue
           formattedMsg = formattedMsg & "<li><h3><a href=3D'" & rssFeed.items[i].link & "'>" & rssFeed.items[i].title & "</a></h3>"
         except:
           break
+        
+        #formattedMsg = formattedMsg & "<p>" & rssFeed.items[i].pubDate & "</p>"
 
         if fullText:
           formattedMsg = formattedMsg & "<p>" & rssFeed.items[i].description.replace("href=", "href=3D").replace("<hr />","") & "</p></li>"
@@ -62,7 +75,7 @@ proc buildFeed(feedUrl: string,itemCount: int, fullText = false , isAtom = false
       formattedMsg = formattedMsg & "</ul>"
 
   except:
-    formattedMsg = "Error with: " & feedUrl
+    formattedMsg = "<br>Error with: " & feedUrl
 
   return formattedMsg
 
