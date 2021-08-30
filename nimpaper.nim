@@ -48,10 +48,12 @@ proc buildFeed(feedUrl: string,itemCount: int, fullText = false , isAtom = false
         # Sometimes the amount of news is smaller than what the user sets
         try:
           # "Tue, 19 Oct 2004 13:38:55 -0400"
-          var modPubDate = rssFeed.items[i].pubDate;
-          modPubDate = modPubDate[0 .. ^3] & ":" & modPubDate[^2 .. ^1]
-          if (now().utc - parse(modPubDate, "ddd, dd MMM yyyy HH:mm:ss zzz").utc).inHours > 24:
-            continue
+          var modPubDate = rssFeed.items[i].pubDate
+          # if there is no publish date, skip time calculations
+          if(modPubDate != ""):
+            modPubDate = modPubDate[0 .. ^3] & ":" & modPubDate[^2 .. ^1]
+            if (now().utc - parse(modPubDate, "ddd, dd MMM yyyy HH:mm:ss zzz").utc).inHours > 24:
+              continue
           feedMsg = feedMsg & "<li><h3><a href=3D'" & rssFeed.items[i].link & "'>" & rssFeed.items[i].title & "</a></h3>"
         except:
           break
@@ -82,23 +84,24 @@ proc buildFeed(feedUrl: string,itemCount: int, fullText = false , isAtom = false
           #"2021-08-27T02:08:26+00:00"
           var modPublished = atomFeed.entries[i].published
           var dateString = ""
-          # account for the published date not including time zone information
-          if(len(modPublished) < 20):
-            modPublished = modPublished[0 .. 9] & " " & modPublished[11 .. 18]
-            dateString = "yyyy-MM-dd HH:mm:ss"
-          else:
-            modPublished = modPublished[0 .. 9] & " " & modPublished[11 .. ^1]
-            modPublished.insert(" ", 19)
-            dateString = "yyyy-MM-dd HH:mm:ss zzz"
-            
-          if (now().utc - parse(modPublished, dateString).utc).inHours > 24:
-            continue
+
+          # if there is no published date, skip time calculations
+          if(modPublished != ""):
+            # account for the published date not including time zone information
+            if(len(modPublished) < 20):
+              modPublished = modPublished[0 .. 9] & " " & modPublished[11 .. 18]
+              dateString = "yyyy-MM-dd HH:mm:ss"
+            else:
+              modPublished = modPublished[0 .. 9] & " " & modPublished[11 .. ^1]
+              modPublished.insert(" ", 19)
+              dateString = "yyyy-MM-dd HH:mm:ss zzz"
+
+            if (now().utc - parse(modPublished, dateString).utc).inHours > 24:
+              continue
 
           feedMsg = feedMsg & "<li><h3><a href=3D'" & atomFeed.entries[i].link.href & "'>" & atomFeed.entries[i].title.text & "</a></h3>"
         except:
           break
-
-        #feedMsg = feedMsg & "<p>" & atomFeed.entries[i].published & "</p>"
 
         if fullText:
           feedMsg = feedMsg & "<p>" & atomFeed.entries[i].content.text.replace("href=", "href=3D").replace("<hr />","") & "</p></li>"
