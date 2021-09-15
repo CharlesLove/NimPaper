@@ -61,7 +61,8 @@ proc buildFeed(feedUrl: string,itemCount: int, fullText = false , isAtom = false
         #formattedMsg = formattedMsg & "<p>" & rssFeed.items[i].pubDate & "</p>"
 
         if fullText:
-          feedMsg = feedMsg & "<p>" & rssFeed.items[i].description.replace("href=", "href=3D").replace("<hr />","") & "</p></li>"
+          #feedMsg = feedMsg & "<p>" & rssFeed.items[i].description.replace("href=", "href=3D").replace("<hr />","") & "</p></li>"
+          feedMsg = feedMsg & "<p>" & rssFeed.items[i].description.replace("<hr />","") & "</p></li>"
         else:
           feedMsg = feedMsg & "</li>"
         
@@ -104,7 +105,8 @@ proc buildFeed(feedUrl: string,itemCount: int, fullText = false , isAtom = false
           break
 
         if fullText:
-          feedMsg = feedMsg & "<p>" & atomFeed.entries[i].content.text.replace("href=", "href=3D").replace("<hr />","") & "</p></li>"
+          #feedMsg = feedMsg & "<p>" & atomFeed.entries[i].content.text.replace("href=", "href=3D").replace("<hr />","") & "</p></li>"
+          feedMsg = feedMsg & "<p>" & atomFeed.entries[i].content.text.replace("<hr />","") & "</p></li>"
         else:
           feedMsg = feedMsg & "</li>"
 
@@ -147,6 +149,8 @@ proc parseCfg() =
 parseCfg()
 
 fullMsg = fullMsg & "</body></html>"
+# Replace all the broken characters
+fullMsg = strutils.multiReplace(fullMsg, [("&#8211;", "-"), ("–", "-"), ("&rsquo;", "'"), ("’", "'"), ("&lsquo;", "'"), ("‘", "'")])
 
 sendMail(fromAddr = eml,
         toAddrs  = @[eml],
