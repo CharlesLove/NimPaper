@@ -150,7 +150,7 @@ parseCfg()
 
 fullMsg = fullMsg & "</body></html>"
 # Replace all the broken characters
-fullMsg = strutils.multiReplace(fullMsg, [("&#8211;", "-"), ("–", "-"), ("&rsquo;", "'"), ("’", "'"), ("&lsquo;", "'"), ("‘", "'")])
+fullMsg = strutils.multiReplace(fullMsg, [("&#8211;", "-"), ("–", "-"), ("&rsquo;", "'"), ("’", "'"), ("&lsquo;", "'"), ("‘", "'"), ("—", "-"), ("&mdash;", "-"), ("“", "\""), ("&ldquo;", "\""), ("”", "\""), ("&rdquo;", "\"")])
 
 sendMail(fromAddr = eml,
         toAddrs  = @[eml],
