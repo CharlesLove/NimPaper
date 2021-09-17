@@ -150,7 +150,7 @@ parseCfg()
 
 fullMsg = fullMsg & "</body></html>"
 # Replace all the broken characters
-fullMsg = strutils.multiReplace(fullMsg, [("&#8211;", "-"), ("–", "-"), ("&rsquo;", "'"), ("’", "'"), ("&lsquo;", "'"), ("‘", "'"), ("—", "-"), ("&mdash;", "-"), ("“", "\""), ("&ldquo;", "\""), ("”", "\""), ("&rdquo;", "\""),
+fullMsg = strutils.multiReplace(fullMsg, [("&#8211;", "-"), ("–", "-"), ("&rsquo;", "'"), ("’", "'"), ("&lsquo;", "'"), ("‘", "'"), ("—", "-"), ("&mdash;", "-"), ("“", "\""), ("&ldquo;", "\""), ("”", "\""), ("&rdquo;", "\""), ("　", " "), ("&#12288;", " "),
                                           # TODO: Figure out a better way to do this
                                           # Mathematical Alphanumeric Symbols
                                           # Bold Symbols
